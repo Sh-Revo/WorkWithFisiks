@@ -7,27 +7,29 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float _radius;
     [SerializeField] private float _force;
 
-    private void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (EnterSphere.flag == true)
-        {
-            Explode();
-        }
-        
+        Explode();
+        Destroy(gameObject);
     }
 
     public void Explode()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _radius);
+        Vector3 explosionPos = transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, _radius);
 
         for (int i = 0; i < colliders.Length; i++)
         {
             Rigidbody rigidbody = colliders[i].attachedRigidbody;
             if (rigidbody != null)
             {
+                Debug.Log("Explode");
                 rigidbody.AddExplosionForce(_force, transform.position, _radius);
             }
         }
         
+        
     }
+
+
 }
